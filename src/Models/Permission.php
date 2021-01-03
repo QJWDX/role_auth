@@ -3,7 +3,6 @@
 
 namespace Dx\Role\Models;
 
-
 use Dx\Role\Traits\PaginateTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -39,10 +38,8 @@ class Permission extends EntrustPermission
         //获取path与method的name
         $path = $request->route()->uri;
         $method = $request->method();
-
         //去除不必要的参数
         $name = $this->newQuery()->where("path", $path)->where("method", 'like', '%' . $method . "%")->value("name");
-
         return $user->can($name);
     }
 

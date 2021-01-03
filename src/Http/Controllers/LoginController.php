@@ -5,6 +5,7 @@ namespace Dx\Role\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Service\Rsa;
 use Dx\Role\Exceptions\RoleException;
+use Dx\Role\Handlers\BaiDuHandler;
 use Dx\Role\Models\LoginLog;
 use Dx\Role\Models\RoleUser;
 use Dx\Role\Models\User;
@@ -25,7 +26,7 @@ class LoginController extends Controller
     //登录的随机key
     const LOGIN_KEY = 'login_rand_str';
 
-    public function login(Request $request, User $user, RoleUser $roleUser)
+    public function login(Request $request)
     {
         $this->checkCaptcha($request);
         $input = $request->only('username', 'password');
@@ -327,12 +328,22 @@ class LoginController extends Controller
     /**
      * 记录登录情况
      * @param $user
-     * @param int $type
+     * @param int $is_success
      */
-    protected function loggingLoginResult($user, $type = 1): void
+    protected function loggingLoginResult($user, $is_success = 1): void
     {
+        $user_id = $user['id'];
+        $login_time = date('Y-m-d H:i:s');
+        $ip = request()->header('x-real-ip', request()->ip());
+        $ip = '113.66.107.138';
+        $login_address = '未知';
+        if(!in_array($ip, ['127.0.0.1'])){
+            $baidu = BaiDuHandler::getInstance();
+            $login_address = $baidu::getLocationByIp($ip);
+        }
         $loginLog = new LoginLog();
-        $loginLog->createLog($user, $type);
+        $log = compact('user_id', 'ip', 'login_address', 'login_time', 'is_success');
+        $loginLog->createLog($log);
     }
 
     /**

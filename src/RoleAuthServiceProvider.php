@@ -55,6 +55,7 @@ class RoleAuthServiceProvider extends ServiceProvider
                 __DIR__.'/../config/role.php' => config_path('role.php'),
                 __DIR__.'/../config/rsa.php' => config_path('rsa.php'),
                 __DIR__.'/../config/login.php' => config_path('login.php'),
+                __DIR__.'/../config/baidu.php' => config_path('baidu.php'),
             ],
             'config'
         );

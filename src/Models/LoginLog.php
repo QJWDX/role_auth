@@ -50,15 +50,8 @@ class LoginLog extends BaseModel
         return true;
     }
 
-    public function createLog($user, $is_success = 0)
+    public function createLog($log)
     {
-        $ip = request()->header('x-real-ip') ?: request()->ip();
-        $log = [
-            'user_id' => $user['id'],
-            'login_time' => Carbon::now()->toDateTimeString(),
-            'ip' => $ip,
-            'is_success' => $is_success
-        ];
         $this->newQuery()->create($log);
     }
 }
