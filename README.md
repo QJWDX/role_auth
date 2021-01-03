@@ -9,7 +9,7 @@
 ### 发布配置文件
 
 ```
-php artisan vendor:publish --provider="Dx\Role\RolePermissionsServiceProvider"
+php artisan vendor:publish --provider="Dx\Role\RoleAuthServiceProvider"
 ```
 
 >配置User表与类，`config/role.php`
