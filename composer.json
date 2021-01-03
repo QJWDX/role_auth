@@ -1,0 +1,39 @@
+{
+    "name": "dx/role_auth",
+    "description": "A laravel package provides Role Permissions implementation",
+    "type" : "library",
+    "version": "1.0.0",
+    "minimum-stability": "dev",
+    "authors": [
+        {
+            "name": "lizhixiong",
+            "email": "lizhixiong@runone.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.0",
+        "ext-dom": "*",
+        "illuminate/support": "5.8.*",
+        "zizaco/entrust": "^1.9",
+        "phpseclib/phpseclib": "~2.0",
+        "predis/predis": "^1.1",
+        "mews/captcha": "^3.0",
+        "maatwebsite/excel": "^3.1"
+    },
+    "autoload": {
+        "classmap": [
+            "database"
+        ],
+        "psr-4": {
+            "App\\": "app/",
+            "Dx\\Role\\": "src"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Dx\\Role\\RoleAuthServiceProvider"
+            ]
+        }
+    }
+}
