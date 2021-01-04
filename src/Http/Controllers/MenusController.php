@@ -4,8 +4,7 @@
 namespace Dx\Role\Http\Controllers;
 
 
-use App\Handlers\CategoryHandler;
-use App\Http\Controllers\Controller;
+use Dx\Role\Handlers\CategoryHandler;
 use Dx\Role\Http\Requests\MenusRequest;
 use Dx\Role\Models\Menus;
 use Dx\Role\Models\Permission;

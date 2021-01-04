@@ -5,11 +5,9 @@ use Dx\Role\Http\Middleware\PermissionMiddleware;
 use Dx\Role\Models\Menus;
 use Dx\Role\Models\Permission;
 use Dx\Role\Models\Role;
-use Dx\Role\Models\User;
 use Dx\Role\Observers\MenuObserver;
 use Dx\Role\Observers\PermissionObserver;
 use Dx\Role\Observers\RoleObserver;
-use Dx\Role\Observers\UserObserver;
 use Illuminate\Support\ServiceProvider;
 
 class RoleAuthServiceProvider extends ServiceProvider
@@ -111,7 +109,6 @@ class RoleAuthServiceProvider extends ServiceProvider
     {
         Menus::observe(MenuObserver::class);
         Role::observe(RoleObserver::class);
-        User::observe(UserObserver::class);
         Permission::observe(PermissionObserver::class);
     }
 }

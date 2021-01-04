@@ -2,8 +2,6 @@
 
 
 namespace Dx\Role\Http\Controllers;
-
-use App\Http\Controllers\Controller;
 use Dx\Role\Http\Requests\DeleteRequest;
 use Dx\Role\Models\LoginLog;
 use Illuminate\Http\Request;

@@ -2,8 +2,6 @@
 
 namespace Dx\Role\Http\Controllers;
 
-use App\Handlers\UploadHandler;
-use App\Http\Controllers\Controller;
 use Dx\Role\Http\Requests\UserRequest;
 use Dx\Role\Models\Menus;
 use Dx\Role\Models\Role;
@@ -13,7 +11,6 @@ use Dx\Role\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 
 class UserController extends Controller
@@ -29,7 +26,7 @@ class UserController extends Controller
     public function store(UserRequest $request, User $user)
     {
         $data = $request->only(['name', 'username', 'email', 'phone', 'sex']);
-        $data['password'] = Hash::make('12345');
+        $data['password'] = Hash::make('123456');
         $res = $user->newQuery()->create($data);
         if($res){
             return $this->success('新增用户成功');
@@ -90,7 +87,7 @@ class UserController extends Controller
         $menu_ids = [];
         $isSuperRole = $role->isSuperRole($role_ids);
         if(!$isSuperRole){
-            $menu_ids = $roleMenus->newQuery()->whereIn('role_id', $role_ids)->distinct()->pluck('menus_id')->toArray();
+            $menu_ids = $roleMenus->newQuery()->whereIn('role_id', $role_ids)->distinct()->pluck('menu_id')->toArray();
         }
         $permissionData = $menus->permissionMenusAndRoute($isSuperRole, $menu_ids);
         return $this->success($permissionData);
@@ -127,19 +124,19 @@ class UserController extends Controller
     }
 
     // 头像上传
-    public function userAvatarUpload($id, Request $request, UploadHandler $uploadHandler){
-        $user = User::query()->find($id);
-        if(!$user){
-            return $this->error('用户不存在');
+    public function userAvatarUpload(Request $request){
+        $params = $request->validated();
+        //处理图片
+        if (isset($params['avatar']) and !empty($params['avatar'])) {
+            $disk_url = $params['avatar']->store('', 'avatars');
+            //去除根节点
+            $real_url = str_replace(public_path(), '', config("filesystems.disks.avatars.root")) . '/' . $disk_url;
+            if (env("FILE_HOST")) {
+                $real_url = env("FILE_HOST") . $real_url;
+            }
+            return $this->success(['avatar_url' => $real_url], 200, '上传成功');
         }
-        $file = $request->file('file');
-        $data = $uploadHandler->storeFile($file, 'image', 'avatar');
-        $user->avatar = $data['path'];
-        $result = $user->save();
-        if($result){
-            return $this->success($data);
-        }
-        return $this->error('头像更新失败');
+        return $this->error('上传失败');
     }
 
     /**

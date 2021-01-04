@@ -2,13 +2,12 @@
 
 
 namespace Dx\Role\Http\Controllers;
-use App\Http\Controllers\Controller;
-use App\Service\Rsa;
 use Dx\Role\Exceptions\RoleException;
 use Dx\Role\Handlers\BaiDuHandler;
 use Dx\Role\Models\LoginLog;
 use Dx\Role\Models\RoleUser;
 use Dx\Role\Models\User;
+use Dx\Role\Service\Rsa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redis;

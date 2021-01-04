@@ -3,16 +3,15 @@
 
 namespace Dx\Role\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Dx\Role\Http\Requests\RoleRequest;
 use Dx\Role\Models\Menus;
-use Dx\Role\Models\Permission;
 use Dx\Role\Models\PermissionMenu;
 use Dx\Role\Models\Role;
 use Dx\Role\Models\RoleMenu;
 use Dx\Role\Models\RoleUser;
 use Dx\Role\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class RoleController extends Controller
 {
@@ -119,7 +118,7 @@ class RoleController extends Controller
         if($roleData['is_super'] == 1){
             $roleMenuId = $menus->newQuery()->pluck('id');
         }else{
-            $roleMenuId = $roleMenus->newQuery()->where('role_id', $id)->distinct()->pluck('menus_id');
+            $roleMenuId = $roleMenus->newQuery()->where('role_id', $id)->pluck('menu_id');
         }
         return $this->success([
             'menu_tree' => $menuTree,
@@ -159,14 +158,15 @@ class RoleController extends Controller
             return $this->error(500, '参数错误');
         }
         $menus = array_unique($menus);
-        $thisRole= $role->newQuery()->find($id);
+        Log::channel('test_log')->info($menus);
+        $thisRole = $role->newQuery()->find($id);
         if($thisRole['is_super'] == 1){
             return $this->success('权限菜单配置成功');
         }
         $roleMenus->newQuery()->where('role_id', $id)->delete();
         $role_menu_data = [];
         foreach ($menus as $menu){
-            $role_menu_data[] = ['role_id' => $id, 'menus_id' => $menu];
+            $role_menu_data[] = ['role_id' => $id, 'menu_id' => $menu];
         }
         $result = $roleMenus->newQuery()->insert($role_menu_data);
         $permissions = $permissionMenu->newQuery()->whereIn('menu_id', $menus)->pluck('permission_id')->toArray();

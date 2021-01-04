@@ -33,7 +33,7 @@ Route::group(['prefix' => 'api/setting', 'namespace' => 'Dx\Role\Http\Controller
     // 获取vue动态路由和菜单
     Route::post('getUserVueRoute', 'UserController@getUserVueRoute');
     // 用户头像上传
-    Route::post('userAvatarUpload/{id}', 'UserController@userAvatarUpload');
+    Route::post('userAvatarUpload', 'UserController@userAvatarUpload');
     // 修改用户密码
     Route::post('userPasswordUpdate/{id}', 'UserController@userPasswordUpdate');
     // 冻结启用禁用用户
