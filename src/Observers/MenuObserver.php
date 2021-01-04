@@ -17,7 +17,6 @@ class MenuObserver
 
     public function updated(Menus $menus)
     {
-        Log::channel('test_log')->info(111111111);
         //1. 父级状态为关闭时，子集全部关闭，
         //2. 子集全部关闭时， 父级关闭
         if ($menus['parent_id'] == 0 and $menus['is_show'] == 0) {
