@@ -14,6 +14,7 @@ class Menus extends Migration
     public function up()
     {
         Schema::create("menus", function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments("id");
             $table->integer("parent_id")->default(0)->comment("上级id,(0表示顶级)");
             $table->string("name")->comment("菜单名称");

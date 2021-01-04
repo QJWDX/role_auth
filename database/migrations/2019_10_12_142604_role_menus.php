@@ -14,12 +14,12 @@ class RoleMenus extends Migration
     public function up()
     {
         Schema::create("role_menus", function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments("id");
             $table->integer("role_id");
             $table->integer("menu_id");
-            $table->foreign('menu_id')->references('id')->on('menus')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('role_id')->references('id')->on('roles')->onUpdate('cascade')->onDelete('cascade');
-            $table->primary(['menu_id', 'role_id']);
+            $table->timestamps();
+            $table->comment = '角色菜单关联表';
         });
     }
 

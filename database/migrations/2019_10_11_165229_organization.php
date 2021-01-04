@@ -14,6 +14,7 @@ class Organization extends Migration
     public function up()
     {
         Schema::create('organization', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string("name")->comment("组织名称");
             $table->integer("parent_id")->comment("父类id(顶级为0，即为系统组织)");

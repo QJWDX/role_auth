@@ -14,6 +14,7 @@ class CreateUsersTable extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('name')->comment("姓名");
             $table->string('username')->comment("用户名");
@@ -29,6 +30,7 @@ class CreateUsersTable extends Migration
             $table->string("address")->nullable()->comment("联系地址");
             $table->string("description")->nullable()->comment("备注信息");
             $table->timestamps();
+            $table->comment = "用户表";
         });
     }
 
@@ -39,6 +41,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists("USERS");
     }
 }

@@ -14,6 +14,7 @@ class OrganizationUser extends Migration
     public function up()
     {
         Schema::create('organization_user', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->integer("user_id")->comment("用户id");
             $table->integer("organization_id")->comment("组织id");
