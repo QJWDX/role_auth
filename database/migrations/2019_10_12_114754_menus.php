@@ -37,6 +37,6 @@ class Menus extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists("MENUS");
+        Schema::dropIfExists("menus");
     }
 }

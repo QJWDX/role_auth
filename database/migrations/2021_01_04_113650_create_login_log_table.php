@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class OrganizationUser extends Migration
+class CreateLoginLogTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,15 @@ class OrganizationUser extends Migration
      */
     public function up()
     {
-        Schema::create('organization_user', function (Blueprint $table) {
+        Schema::create('login_log', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->integer("user_id")->comment("用户id");
-            $table->integer("organization_id")->comment("组织id");
+            $table->integer('user_id')->comment("用户id");
+            $table->string('ip')->comment("登录ip");
+            $table->string('login_address')->comment("登录地址");
+            $table->tinyInteger('is_success')->comment("是否成功1成功0失败");
             $table->timestamps();
-            $table->comment = "组织-用户关系表";
+            $table->comment = "用户登录日志表";
         });
     }
 
@@ -30,6 +32,6 @@ class OrganizationUser extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists("organization_user");
+        Schema::dropIfExists('login_log');
     }
 }

@@ -33,6 +33,6 @@ class Organization extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists("Organization");
+        Schema::dropIfExists("organization");
     }
 }

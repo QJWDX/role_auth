@@ -30,6 +30,6 @@ class RoleMenus extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists("ROLE_MENUS");
+        Schema::dropIfExists("role_menus");
     }
 }
