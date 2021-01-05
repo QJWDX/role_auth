@@ -334,7 +334,6 @@ class LoginController extends Controller
         $user_id = $user['id'];
         $login_time = date('Y-m-d H:i:s');
         $ip = request()->header('x-real-ip', request()->ip());
-        $ip = '113.66.107.138';
         $login_address = '未知';
         if(!in_array($ip, ['127.0.0.1'])){
             $baidu = BaiDuHandler::getInstance();
