@@ -11,6 +11,7 @@ use Dx\Role\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 
 class UserController extends Controller
@@ -125,16 +126,17 @@ class UserController extends Controller
 
     // 头像上传
     public function userAvatarUpload(Request $request){
-        $params = $request->validated();
+        Log::channel('test_log')->info(public_path());
+        $file = $request->file('file');
         //处理图片
-        if (isset($params['avatar']) and !empty($params['avatar'])) {
-            $disk_url = $params['avatar']->store('', 'avatars');
+        if ($file) {
+            $disk_url = $file->store('', 'avatars');
             //去除根节点
             $real_url = str_replace(public_path(), '', config("filesystems.disks.avatars.root")) . '/' . $disk_url;
-            if (env("FILE_HOST")) {
-                $real_url = env("FILE_HOST") . $real_url;
-            }
-            return $this->success(['avatar_url' => $real_url], 200, '上传成功');
+            return $this->success([
+                'src_url' => $real_url,
+                'avatar_url' => env("app.url") . $real_url
+            ], 200, '上传成功');
         }
         return $this->error('上传失败');
     }

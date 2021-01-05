@@ -21,7 +21,7 @@ class PermissionController extends Controller
 
     // 新增接口权限
     public function store(PermissionRequest $request, Permission $permission){
-        $params = $request->only(['name', 'display_name', 'path', 'method', 'status']);
+        $params = $request->only(['name', 'display_name', 'path', 'method', 'is_show']);
         $exists = $permission->newQuery()->where(['path' => $params['path'], 'method' => $params['method']])->exists();
         if($exists){
             return $this->error('已存在同请求方式的接口');
@@ -45,12 +45,12 @@ class PermissionController extends Controller
     // 更新接口权限
     public function update(PermissionRequest $request, $id){
         $permission = Permission::query()->find($id);
-        $params = $request->only(['name', 'display_name', 'path', 'method', 'status']);
+        $params = $request->only(['name', 'display_name', 'path', 'method', 'is_show']);
         $permission->name = $params['name'];
-        $permission->name = $params['display_name'];
-        $permission->name = $params['path'];
-        $permission->name = $params['method'];
-        $permission->name = $params['status'];
+        $permission->display_name = $params['display_name'];
+        $permission->path = $params['path'];
+        $permission->method = $params['method'];
+        $permission->is_show = $params['is_show'];
         $result = $permission->save();
         if(!$result){
             return $this->error('编辑失败');

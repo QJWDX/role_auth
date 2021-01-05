@@ -3,6 +3,7 @@
 
 namespace Dx\Role\Handlers;
 use GuzzleHttp\Client;
+use Dx\Role\Exceptions\RoleException;
 
 class BaiDuHandler
 {
@@ -19,7 +20,7 @@ class BaiDuHandler
 
     public static function getInstance()
     {
-        self::$ak = config('bd.api.ak');
+        self::$ak = config('baidu.ak');
         if (self::$instance == null) {
             self::$instance = new self();
         }
@@ -28,8 +29,8 @@ class BaiDuHandler
 
 
     public static function getLocationByIp($ip = null){
+        $address = '未知';
         try {
-            $address = '未知';
             if($ip !== null){
                 $params = [
                     'json' => [],
@@ -49,9 +50,9 @@ class BaiDuHandler
                     $address = $data['content']['address'];
                 }
             }
-            return $address;
         }catch (\Exception $exception){
-            return '';
+            throw new RoleException($exception->getMessage());
         }
+        return $address;
     }
 }
