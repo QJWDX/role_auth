@@ -124,7 +124,7 @@ class LoginController extends Controller
     {
         $is_black = Redis::connection()->get("blacklist_" . $username);
         if ($is_black) new RoleException('该账号已被冻结');
-        $user = User::where("username", $username)->first();
+        $user = User::query()->where("username", $username)->first();
         if (!$user) throw new RoleException('该账号不存在');
         return $user;
     }

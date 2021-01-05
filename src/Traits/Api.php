@@ -22,6 +22,10 @@ Trait Api
 
     public function error($code = 500, $message = '')
     {
+        if(is_string($code)){
+            $message = $code;
+            $code = 500;
+        }
         return response()->json([
             'code' => $code,
             'server_time' => time(),

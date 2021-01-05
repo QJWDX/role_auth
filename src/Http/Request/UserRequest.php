@@ -16,8 +16,10 @@ class UserRequest extends BaseRequest
 //            'password' => 'required|string',
             'id_card' => 'string|nullable',
             'sex' => 'required|integer|'.Rule::in([0,1]),
-            'address' => 'string|nullable',
             'avatar' => 'string|nullable',
+            'birthday' => 'string|nullable',
+            'address' => 'string|nullable',
+            'description' => 'string|nullable',
         ];
     }
 

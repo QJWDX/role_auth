@@ -34,8 +34,10 @@ Route::group(['prefix' => 'api/setting', 'namespace' => 'Dx\Role\Http\Controller
     Route::post('getUserVueRoute', 'UserController@getUserVueRoute');
     // 用户头像上传
     Route::post('userAvatarUpload', 'UserController@userAvatarUpload');
+    // 检查用户密码
+    Route::post('checkPassword', 'UserController@checkPassword');
     // 修改用户密码
-    Route::post('userPasswordUpdate/{id}', 'UserController@userPasswordUpdate');
+    Route::post('userPasswordUpdate', 'UserController@userPasswordUpdate');
     // 冻结启用禁用用户
     Route::get('changeUserStatus', 'UserController@changeUserStatus');
     // 菜单管理

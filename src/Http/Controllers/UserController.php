@@ -39,14 +39,25 @@ class UserController extends Controller
     public function show($id)
     {
         $user = new User();
-        $data = $user->newQuery()->select(['id', 'name', 'username', 'email', 'phone', 'sex', 'status'])->find($id);
+        $data = $user->newQuery()->find($id);
         return $this->success($data);
     }
 
     // 更新用户
     public function update(UserRequest $request, $id)
     {
-        $params = $request->only(['name', 'username', 'email', 'phone', 'sex', 'id_card', 'address']);
+        $params = $request->only([
+            'name',
+            'username',
+            'sex',
+            'email',
+            'phone',
+            'avatar',
+            'id_card',
+            'birthday',
+            'address',
+            'description',
+        ]);
         $user = User::query()->find($id);
         $user->name = $params['name'];
         $user->username = $params['username'];
@@ -54,10 +65,13 @@ class UserController extends Controller
         $user->phone = $params['phone'];
         $user->sex = $params['sex'];
         $user->id_card = $params['id_card'];
+        $user->avatar = str_replace(config('app.url'), '', $params['avatar']);
         $user->address = $params['address'];
+        $user->birthday = $params['birthday'];
+        $user->description = $params['description'];
         $result = $user->save();
         if($result){
-            return $this->success('编辑用户成功');
+            return $this->success($user, 200, '编辑用户成功');
         }
         return $this->error('编辑用户失败');
     }
@@ -95,26 +109,43 @@ class UserController extends Controller
     }
 
     /**
+     * 判断密码是否正确
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function checkPassword(Request $request){
+        $user = Auth::guard('api')->user();
+        if(!$user){
+            return $this->error('请重新登录');
+        }
+        $params = $request->only(['password']);
+        if(!isset($params['password'])){
+            return $this->error('请求参数错误');
+        }
+
+        if(!Hash::check($params['password'], $user['password'])){
+            return $this->error('密码输入错误');
+        }
+        return $this->success('密码正确');
+    }
+    /**
      * 修改密码
      * @param $id
      * @param Request $request
      * @param User $user
      * @return \Illuminate\Http\JsonResponse
      */
-    function userPasswordUpdate($id, Request $request){
-        $user = User::query()->find($id);
+    function userPasswordUpdate(Request $request){
+        $user = Auth::guard('api')->user();
         if(!$user){
-            return $this->error(500, '用户不存在');
+            return $this->error('请重新登录');
         }
-        $params = $request->only(['password', 'new_password', 'confirm_password']);
-        if($params['new_password'] != $params['confirm_password']){
-            return $this->error('新密码与确认密码不一致');
-        }
+        $params = $request->only(['password', 'new_password']);
         if(!Hash::check($params['password'], $user['password'])){
-            return $this->error('原密码输入错误');
+            return $this->error('密码错误');
         }
         if($params['password'] == $params['new_password']){
-            return $this->error('与原密码重复');
+            return $this->error('密码重复');
         }
         $user->password = Hash::make($params['new_password']);
         $result = $user->save();
@@ -126,16 +157,15 @@ class UserController extends Controller
 
     // 头像上传
     public function userAvatarUpload(Request $request){
-        Log::channel('test_log')->info(public_path());
         $file = $request->file('file');
         //处理图片
         if ($file) {
-            $disk_url = $file->store('', 'avatars');
+            $disk_path = $file->store('', 'avatars');
             //去除根节点
-            $real_url = str_replace(public_path(), '', config("filesystems.disks.avatars.root")) . '/' . $disk_url;
+            $path = str_replace(public_path(), '', config("filesystems.disks.avatars.root")) . '/' . $disk_path;
             return $this->success([
-                'src_url' => $real_url,
-                'avatar_url' => env("app.url") . $real_url
+                'path' => $path,
+                'full_path' => env("app.url") . $path
             ], 200, '上传成功');
         }
         return $this->error('上传失败');
