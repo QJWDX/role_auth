@@ -107,23 +107,69 @@ class RoleController extends Controller
 
     /**
      * 角色菜单配置树形列表
-     * @param Request $request
+     * @param $id
+     * @param Menus $menus
      * @param Role $role
+     * @param RoleMenu $roleMenus
      * @return \Illuminate\Http\JsonResponse
      */
     public function getMenuTree($id, Menus $menus, Role $role, RoleMenu $roleMenus){
         $roleData = $role->newQuery()->find($id);
         if(!$roleData) return $this->error(500, '角色不存在');
         $menuTree = $menus->getMenuTree();
+        $checkMenu = [];
         if($roleData['is_super'] == 1){
-            $roleMenuId = $menus->newQuery()->pluck('id');
+            $checkMenu = $menus->newQuery()->pluck('id');
         }else{
-            $roleMenuId = $roleMenus->newQuery()->where('role_id', $id)->pluck('menu_id');
+            $roleMenu = $roleMenus->newQuery()->where('role_id', $id)->pluck('menu_id')->toArray();
+            if($roleMenu){
+                $this->initCheckMenu($checkMenu, $menuTree, $roleMenu);
+            }
         }
         return $this->success([
             'menu_tree' => $menuTree,
-            'role_menu_id' => $roleMenuId
+            'menu_check' => $checkMenu
         ]);
+    }
+
+    public function initCheckMenu(&$data, $trees, $menu_ids){
+        foreach ($trees as $tree){
+            if(count($tree['children']) == 0){
+                if(in_array($tree['id'], $menu_ids)){
+                    $data[] = $tree['id'];
+                }
+                continue;
+            }
+            $treeNodes = $tree['children'];
+            $nodeId = [];
+            foreach ($treeNodes as $node){
+                if(count($node['children']) == 0){
+                    continue;
+                }
+                $hasNodeTree[] = $node;
+                $children_node_ids = collect($node['children'])->pluck('id')->toArray();
+                if(count(array_diff($children_node_ids, $menu_ids))){
+                    $nodeId[] = $node;
+                    continue;
+                }
+            }
+            foreach ($treeNodes as $node){
+                if(count($node['children']) == 0){
+                    if(in_array($node['id'], $menu_ids) && !in_array($node['id'], $nodeId)){
+                        $data[] = $node['id'];
+                    }
+                    continue;
+                }
+                $this->initCheckMenu($data, $node['children'], $menu_ids);
+            }
+            $node_ids = collect($treeNodes)->pluck('id')->toArray();
+            // 没有全部选中
+            if(count(array_diff($node_ids, $menu_ids)) == 0){
+                if(in_array($tree['id'], $menu_ids) && empty($nodeId)) {
+                    $data[] = $tree['id'];
+                }
+            }
+        }
     }
 
     /**

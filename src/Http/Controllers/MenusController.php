@@ -110,24 +110,20 @@ class MenusController extends Controller
         if(!$exists){
             return $this->error('请求参数有误');
         }
-        $notInPermissionId = $permissionMenu->newQuery()->pluck('permission_id')->toArray();
-        $notCheckPermission = $permission->newQuery()->whereNotIn('id', $notInPermissionId)->select('id', 'name', 'path')->get()->toArray();
-        $checkPermissionId = $permissionMenu->newQuery()->where('menu_id', $id)->pluck('permission_id')->toArray();
-        $checkPermission = $permission->newQuery()->whereIn('id', $checkPermissionId)->select('id', 'name', 'path')->get()->toArray();
-        $check = [];
-        $not_check = [];
-        foreach (array_merge($notCheckPermission, $checkPermission) as $v){
-            $not_check[] = [
-                'label' => $v['name']."[".$v['path']."]",
+        // 所有接口权限
+        $permissions = $permission->newQuery()->select('id', 'display_name', 'name', 'path')->get()->toArray();
+        // 已拥有的权限
+        $menuPermission = $permissionMenu->newQuery()->where('menu_id', $id)->pluck('permission_id')->toArray();
+        $allPermissions = [];
+        foreach ($permissions as $v){
+            $allPermissions[] = [
+                'label' => $v['display_name']."[".$v['path']."]",
                 'key' => $v['id']
             ];
         }
-        foreach ($checkPermission as $v){
-            $check[] = $v['id'];
-        }
         return $this->success([
-            'permission_check' => $check,
-            'permission_not_check' => $not_check
+            'menu_permission' => $menuPermission,
+            'all_permission' => $allPermissions
         ]);
     }
 
