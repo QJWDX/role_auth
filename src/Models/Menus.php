@@ -33,7 +33,7 @@ class Menus extends BaseModel
             $builder = $builder->whereIn('id', $menu_ids);
             $routeBuilder = $routeBuilder->whereIn('id', $menu_ids);
         }
-        $menus = $builder->where('is_show', 1)->latest('sort')->get($select);
+        $menus = $builder->where('is_show', 1)->orderBy('parent_id')->orderBy('sort')->get($select);
         $routes = $routeBuilder->where('is_related_route', 1)->get($select);
         return [
             'menus' => $this->vueMenuTree($menus, 0, 1),
@@ -69,7 +69,7 @@ class Menus extends BaseModel
      * @return array
      */
     public function getMenuTree(){
-        $data = $this->newQuery()->where('is_show', 1)->orderBy('sort')->get()->toArray();
+        $data = $this->newQuery()->where('is_show', 1)->orderBy('parent_id')->orderBy('sort')->get()->toArray();
         return $this->dataTree($data, 0);
     }
 
@@ -101,7 +101,7 @@ class Menus extends BaseModel
      * @return array
      */
     public function getList(){
-        $builder = $this->builderQuery()->orderByDesc('parent_id')->orderByDesc('sort');
+        $builder = $this->builderQuery()->orderBy('parent_id')->orderBy('sort');
         return $this->paginateForApi($builder);
     }
 

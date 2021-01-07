@@ -10,8 +10,9 @@ class PermissionRequest extends BaseRequest
 {
     public function rules()
     {
+        $id = $this->route('permission');
         return [
-            'name' => 'required|string|between:2,100',
+            'name' => 'required|string|between:2,100|unique:permissions,name,'.$id,
             'display_name' => 'required|string|between:2,50',
             'path' => 'required|string|between:2,255',
             'method' => 'required|string',

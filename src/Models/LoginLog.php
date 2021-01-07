@@ -30,7 +30,9 @@ class LoginLog extends BaseModel
 
     public function builderQuery($params = [], $field = ['*']){
         $builder = $this->newQuery()->with('user')->select($field);
-        $builder = $builder->when($params['startTime'], function ($query) use($params){
+        $builder = $builder->when($params['user_id'], function ($query) use($params){
+            $query->whereIn('user_id', $params['user_id']);
+        })->when($params['startTime'], function ($query) use($params){
             $query->where('login_time', '>', $params['startTime']);
         })->when($params['endTime'], function ($query) use($params){
             $query->where('login_time', '<', $params['endTime']);

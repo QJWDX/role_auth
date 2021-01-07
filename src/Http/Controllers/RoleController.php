@@ -2,7 +2,6 @@
 
 
 namespace Dx\Role\Http\Controllers;
-
 use Dx\Role\Http\Request\RoleRequest;
 use Dx\Role\Models\Menus;
 use Dx\Role\Models\PermissionMenu;
@@ -11,20 +10,19 @@ use Dx\Role\Models\RoleMenu;
 use Dx\Role\Models\RoleUser;
 use Dx\Role\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class RoleController extends Controller
 {
     // 角色列表
     public function index(Request $request, Role $role){
-        $role_name = $request->get('role_name');
-        $data = $role->roleList(compact('role_name'));
+        $name = $request->get('name');
+        $data = $role->roleList(compact('name'));
         return $this->success($data);
     }
 
     // 新增角色
     public function store(RoleRequest $request, Role $role){
-        $params = $request->only(['role_name', 'remark']);
+        $params = $request->only(['name', 'display_name', 'remark']);
         $result = $role->newQuery()->create($params);
         if(!$result){
             return $this->error('新增角色失败');
@@ -47,8 +45,9 @@ class RoleController extends Controller
     // 更新角色
     public function update(RoleRequest $request, $id){
         $role = Role::query()->find($id);
-        $params = $request->only(['role_name', 'remark']);
-        $role->role_name = $params['role_name'];
+        $params = $request->only(['name', 'display_name', 'remark']);
+        $role->name = $params['name'];
+        $role->display_name = $params['display_name'];
         $role->remark = $params['remark'];
         $result = $role->save();
         if(!$result){
@@ -62,6 +61,9 @@ class RoleController extends Controller
     public function destroy($id)
     {
         $role = Role::query()->find($id);
+        if($role['is_super']){
+            return $this->error('超级角色不允许删除');
+        }
         $result = $role->delete();
         if($result){
             return $this->success('删除角色成功');
@@ -89,20 +91,6 @@ class RoleController extends Controller
             return $this->error($text.'失败');
         }
         return $this->success($text.'成功');
-    }
-
-    // 角色树形列表
-    public function getRoleTree(Role $role){
-        $list = $role->getAll([],['id', 'role_name', 'is_super']);
-        $treeData = [];
-        foreach ($list as $value){
-            $pushData = [
-                'id' => $value['id'],
-                'label' => $value['role_name'] .'['. ($value->is_super ? 'super' : 'other') . ']'
-            ];
-            array_push($treeData, $pushData);
-        }
-        return $this->success($treeData);
     }
 
     /**

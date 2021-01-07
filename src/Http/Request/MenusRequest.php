@@ -9,14 +9,16 @@ use Illuminate\Validation\Rule;
 
 class MenusRequest extends BaseRequest
 {
+
     public function rules()
     {
+        $id = $this->route('menu');
         return [
-            'name' => 'required|string|between:2,8',
+            'name' => 'required|string|between:2,8|unique:menus,name,'.$id,
             'parent_id' => 'required|integer|'.Rule::in(array_merge(Menus::query()->pluck('id')->toArray(), [0])),
             'icon' => 'required|string|between:1,255',
-            'path' => 'required|string|between:1,255',
-            'component' => 'required|string|between:1,255',
+            'path' => 'required|string|between:1,255|unique:menus,path,'.$id,
+            'component' => 'required|string|between:1,255|unique:menus,component,'.$id,
             'is_related_route' => 'required|integer|'.Rule::in([0,1]),
             'is_show' => 'required|integer|'.Rule::in([0,1]),
             'is_default' => 'required|integer|'.Rule::in([0,1]),

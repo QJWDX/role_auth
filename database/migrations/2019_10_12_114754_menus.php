@@ -17,9 +17,9 @@ class Menus extends Migration
             $table->engine = 'InnoDB';
             $table->increments("id");
             $table->integer("parent_id")->default(0)->comment("上级id,(0表示顶级)");
-            $table->string("name")->comment("菜单名称");
+            $table->string("name")->unique()->comment("菜单名称");
             $table->string("icon")->nullable()->comment("图标");
-            $table->string("path")->comment("url");
+            $table->string("path")->unique()->comment("url");
             $table->string("component")->nullable()->comment('前端组建地址');
             $table->tinyInteger("is_show")->default(1)->comment("是否展示（默认是）(1-是，2-否)");
             $table->tinyInteger("is_related_route")->default(2)->comment("是否关联路由");

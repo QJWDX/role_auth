@@ -67,5 +67,5 @@ Route::group(['prefix' => 'api/setting', 'namespace' => 'Dx\Role\Http\Controller
     // 登录日志
     Route::apiResource('loginLog', 'loginLogController')->only(['index','show','destroy']);
     // 批量删除登录日志
-    Route::delete('delLoginLog', 'LoginLogController@delLoginLog');
+    Route::delete('delLoginLog', 'operationLogController@delLoginLog');
 });

@@ -42,7 +42,7 @@ class MenuObserver
 
     public function deleted(Menus $menus)
     {
-        DB::table('role_menus')->where('menus_id', $menus->id)->delete();
-        DB::table('permission_menu')->where('menus_id', $menus->id)->delete();
+        DB::table('role_menus')->where('menu_id', $menus->id)->delete();
+        DB::table('permission_menu')->where('menu_id', $menus->id)->delete();
     }
 }

@@ -20,8 +20,8 @@ class EntrustSetupTables extends Migration
             $table->increments('id');
             $table->string('name')->unique()->comment("角色名称");
             $table->string('display_name')->nullable()->comment("显示名称");
+            $table->tinyInteger('is_super')->default(0)->comment("是否超级角色");
             $table->string('remark')->nullable()->comment("角色备注");
-            $table->tinyInteger("is_super")->default(0)->comment("是否为最高级角色1是0否");
             $table->timestamps();
             $table->comment = "角色表";
         });
@@ -43,12 +43,12 @@ class EntrustSetupTables extends Migration
             $table->increments('id');
             $table->string('name')->unique();
             $table->string('display_name')->nullable();
-            $table->string('description')->nullable();
             $table->string("path")->comment("路由url");
             $table->enum("method", ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS', 'HEAD'])->comment("http请求方式（GET, POST, PUT, DELETE, PATCH, OPTIONS, HEAD）");
             $table->integer("parent_id")->default(0)->comment("父级id");
             $table->integer("level")->default(1)->comment("级别");
             $table->integer("is_show")->default(1)->comment("是否显示(1显示0否)");
+            $table->string('description')->nullable();
             $table->timestamps();
             $table->comment = "权限表";
         });
