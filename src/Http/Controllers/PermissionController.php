@@ -3,8 +3,8 @@
 
 namespace Dx\Role\Http\Controllers;
 
-use Dx\Role\Http\Requests\DeleteRequest;
-use Dx\Role\Http\Requests\PermissionRequest;
+use Dx\Role\Http\Request\DeleteRequest;
+use Dx\Role\Http\Request\PermissionRequest;
 use Dx\Role\Models\Permission;
 use Illuminate\Http\Request;
 

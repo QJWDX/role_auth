@@ -2,7 +2,7 @@
 
 namespace Dx\Role\Http\Controllers;
 
-use Dx\Role\Http\Requests\UserRequest;
+use Dx\Role\Http\Request\UserRequest;
 use Dx\Role\Models\Menus;
 use Dx\Role\Models\Role;
 use Dx\Role\Models\RoleMenu;

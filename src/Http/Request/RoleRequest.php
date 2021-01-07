@@ -1,10 +1,10 @@
 <?php
 
 
-namespace Dx\Role\Http\Requests;
+namespace Dx\Role\Http\Request;
 
 
-class RoleRequest extends BaseRequest
+class RoleRequest extends BaseReques
 {
     public function rules()
     {

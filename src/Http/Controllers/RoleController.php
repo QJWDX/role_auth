@@ -3,7 +3,7 @@
 
 namespace Dx\Role\Http\Controllers;
 
-use Dx\Role\Http\Requests\RoleRequest;
+use Dx\Role\Http\Request\RoleRequest;
 use Dx\Role\Models\Menus;
 use Dx\Role\Models\PermissionMenu;
 use Dx\Role\Models\Role;

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Dx\Role\Http\Requests;
+namespace Dx\Role\Http\Request;
 
 class DeleteRequest extends BaseRequest
 {

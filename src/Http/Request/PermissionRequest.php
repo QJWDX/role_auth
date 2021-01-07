@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Dx\Role\Http\Requests;
+namespace Dx\Role\Http\Request;
 
 
 use Illuminate\Validation\Rule;
