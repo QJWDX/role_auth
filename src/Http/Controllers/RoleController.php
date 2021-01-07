@@ -184,17 +184,16 @@ class RoleController extends Controller
         if(!$role->newQuery()->where('id', $id)->exists()){
             return $this->error('角色不存在');
         }
-        $check_users = $roleUser->newQuery()->where('role_id', $id)->distinct()->pluck('user_id')->toArray();
+        $check_user = $roleUser->newQuery()->where('role_id', $id)->distinct()->pluck('user_id')->toArray();
         $users = $user->newQuery()->select('id', 'name', 'username')->get()->toArray();
-        $treeData = [];
-        collect($users)->each(function ($item) use (&$treeData){
-            $treeData[] = [
-                'id' => $item['id'],
-                'label' => $item['username'],
-                'children' => []
+        $allUsers = [];
+        foreach ($users as $user){
+            $allUsers[] = [
+                'label' => $user['username']."[".$user['name']."]",
+                'key' => $user['id']
             ];
-        });
-        return $this->success(['user_tree' => $treeData, 'user_check' => $check_users]);
+        }
+        return $this->success(['all_user' => $allUsers, 'check_user' => $check_user]);
     }
 
     // 设置角色权限菜单
@@ -204,7 +203,6 @@ class RoleController extends Controller
             return $this->error(500, '参数错误');
         }
         $menus = array_unique($menus);
-        Log::channel('test_log')->info($menus);
         $thisRole = $role->newQuery()->find($id);
         if($thisRole['is_super'] == 1){
             return $this->success('权限菜单配置成功');
@@ -232,24 +230,29 @@ class RoleController extends Controller
      * 设置角色用户
      * @param Request $request
      * @param Role $role
-     * @param RoleMenu $roleMenus
+     * @param User $user
      * @return \Illuminate\Http\JsonResponse
      */
-    public function setRoleUsers(Request $request, Role $role, RoleUser $roleUser){
+    public function setRoleUsers(Request $request, Role $role, User $user, RoleUser $roleUser){
         $role_id = $request->get('role', false);
-        $users = $request->get('users', false);
-        $insert_data = [];
-        if(is_array($users)){
-            $roleUser->newQuery()->where('role_id', $role_id)->delete();
-            foreach ($users as $user_id){
-                array_push($insert_data, ['role_id' => $role_id, 'user_id' => $user_id]);
-            }
-            $res = $roleUser->newQuery()->insert($insert_data);
-            if($res){
-                return $this->success('用户管理配置成功');
-            }
-            return $this->error(500, '用户管理配置失败');
+        $user_ids = $request->get('users', false);
+        $thisRole = $role->newQuery()->find($role_id);
+        if(!$thisRole){
+            return $this->error(500, '角色不存在');
         }
-        return $this->error(500, '参数错误');
+        try {
+            $roleUser->newQuery()->where('role_id', $role_id)->delete();
+            $insert_data = [];
+            foreach ($user_ids as $user_id){
+                $insert_data[] = [
+                    'role_id' => $role_id,
+                    'user_id' => $user_id
+                ];
+            }
+            $roleUser->newQuery()->insert($insert_data);
+            return $this->success('角色拥有用户配置成功');
+        }catch (\Exception $exception){
+            return $this->error(500, '角色拥有用户配置失败');
+        }
     }
 }
