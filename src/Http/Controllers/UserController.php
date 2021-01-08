@@ -165,7 +165,7 @@ class UserController extends Controller
             $path = str_replace(public_path(), '', config("filesystems.disks.avatars.root")) . '/' . $disk_path;
             return $this->success([
                 'path' => $path,
-                'full_path' => env("app.url") . $path
+                'full_path' => config("app.url") . $path
             ], 200, '上传成功');
         }
         return $this->error('上传失败');

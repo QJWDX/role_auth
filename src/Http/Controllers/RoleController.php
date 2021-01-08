@@ -4,6 +4,7 @@
 namespace Dx\Role\Http\Controllers;
 use Dx\Role\Http\Request\RoleRequest;
 use Dx\Role\Models\Menus;
+use Dx\Role\Models\Permission;
 use Dx\Role\Models\PermissionMenu;
 use Dx\Role\Models\Role;
 use Dx\Role\Models\RoleMenu;
@@ -241,6 +242,20 @@ class RoleController extends Controller
             return $this->success('角色拥有用户配置成功');
         }catch (\Exception $exception){
             return $this->error(500, '角色拥有用户配置失败');
+        }
+    }
+
+    public function refreshRolePermissions(Role $role, PermissionMenu $permissionMenu){
+        try {
+            $roles = $role->newQuery()->where('is_super', 0)->get();
+            foreach ($roles as $roleObj){
+                $permissions = $permissionMenu->newQuery()->whereIn('menu_id', $roleObj->menus())->pluck('permission_id')->toArray();
+                $roleObj->perms()->sync([]);
+                $roleObj->perms()->sync($permissions);
+            }
+            return $this->success('刷新权限成功');
+        }catch (\Exception $exception){
+            $this->success($exception->getMessage());
         }
     }
 }

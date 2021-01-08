@@ -13,6 +13,10 @@ class Role extends EntrustRole
     protected $table = 'roles';
     protected $guarded = [];
 
+    public function menus(){
+        return $this->hasMany(Menus::class, 'role_id', 'id')->pluck('menus_id')->toArray();
+    }
+
     public function roleList($params = []){
         $builder = $this->builderQuery($params);
         return $this->paginateForApi($builder);
