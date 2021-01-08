@@ -26,9 +26,21 @@ class UserController extends Controller
     // 新增用户
     public function store(UserRequest $request, User $user)
     {
-        $data = $request->only(['name', 'username', 'email', 'phone', 'sex']);
-        $data['password'] = Hash::make('123456');
-        $res = $user->newQuery()->create($data);
+        $params = $request->only([
+            'name',
+            'username',
+            'sex',
+            'email',
+            'phone',
+            'avatar',
+            'id_card',
+            'birthday',
+            'address',
+            'description'
+        ]);
+        $params['password'] = Hash::make($params['username'].'@'.date('Y'));
+        $params['avatar'] = str_replace(config('app.url'), '', $params['avatar']);
+        $res = $user->newQuery()->create($params);
         if($res){
             return $this->success('新增用户成功');
         }
@@ -169,6 +181,24 @@ class UserController extends Controller
             ], 200, '上传成功');
         }
         return $this->error('上传失败');
+    }
+
+    /**
+     * 重置密码
+     * @param $id
+     * @param User $user
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function resetUserPassword($id, User $user){
+        $currentUser = $user->newQuery()->select('username')->find($id);
+        if(!$currentUser){
+            return $this->error('用户不存在');
+        }
+        $currentUser->password =  Hash::make($currentUser['username'].'@'.date('Y'));
+        if($currentUser->save()){
+            return $this->success('重置密码成功');
+        }
+        return $this->error('重置密码失败');
     }
 
     /**

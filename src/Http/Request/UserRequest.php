@@ -13,7 +13,7 @@ class UserRequest extends BaseRequest
             'username' => 'required|string|between:2,16',
             'phone' => 'required|regex:/^1[3456789]\d{9}$/|unique:users,phone,'.$id,
             'email' => 'required|email|unique:users,email,'.$id,
-            'id_card' => 'string|nullable',
+            'id_card' => 'required|string|nullable',
             'sex' => 'required|integer|'.Rule::in([0,1]),
             'avatar' => 'string|nullable',
             'birthday' => 'string|nullable',

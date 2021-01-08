@@ -245,7 +245,13 @@ class RoleController extends Controller
         }
     }
 
-    public function refreshRolePermissions(Role $role, PermissionMenu $permissionMenu){
+    /**
+     * 刷新权限
+     * @param Role $role
+     * @param PermissionMenu $permissionMenu
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function refreshRolePermission(Role $role, PermissionMenu $permissionMenu){
         try {
             $roles = $role->newQuery()->where('is_super', 0)->get();
             foreach ($roles as $roleObj){
@@ -255,7 +261,7 @@ class RoleController extends Controller
             }
             return $this->success('刷新权限成功');
         }catch (\Exception $exception){
-            $this->success($exception->getMessage());
+            return $this->error($exception->getMessage());
         }
     }
 }

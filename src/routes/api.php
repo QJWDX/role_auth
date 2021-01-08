@@ -38,6 +38,8 @@ Route::group(['prefix' => 'api/setting', 'namespace' => 'Dx\Role\Http\Controller
     Route::post('checkPassword', 'UserController@checkPassword');
     // 修改用户密码
     Route::post('userPasswordUpdate', 'UserController@userPasswordUpdate');
+    // 重置用户密码
+    Route::get('resetUserPassword', 'UserController@resetUserPassword');
     // 冻结启用禁用用户
     Route::get('changeUserStatus', 'UserController@changeUserStatus');
     // 菜单管理
@@ -50,6 +52,8 @@ Route::group(['prefix' => 'api/setting', 'namespace' => 'Dx\Role\Http\Controller
     Route::post('setMenuPermission', 'MenusController@setMenuPermission');
     // 角色管理
     Route::apiResource('role', 'RoleController');
+    // 刷新用户权限
+    Route::get('refreshRolePermission', 'RoleController@refreshRolePermission');
     // 启用禁用角色
     Route::get('changeRoleStatus', 'RoleController@changeRoleStatus');
     // 获取角色菜单权限配置
@@ -67,5 +71,5 @@ Route::group(['prefix' => 'api/setting', 'namespace' => 'Dx\Role\Http\Controller
     // 登录日志
     Route::apiResource('loginLog', 'loginLogController')->only(['index','show','destroy']);
     // 批量删除登录日志
-    Route::delete('delLoginLog', 'operationLogController@delLoginLog');
+    Route::delete('delLoginLog', 'loginLogController@delLoginLog');
 });

@@ -3,10 +3,9 @@
 namespace Dx\Role\Http\Middleware;
 
 use Closure;
-use Illuminate\Http\Request;
 use Dx\Role\Exceptions\RoleException;
 use Dx\Role\Models\Permission;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class PermissionMiddleware
 {
