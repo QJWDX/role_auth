@@ -39,7 +39,7 @@ Route::group(['prefix' => 'api/setting', 'namespace' => 'Dx\Role\Http\Controller
     // 修改用户密码
     Route::post('userPasswordUpdate', 'UserController@userPasswordUpdate');
     // 重置用户密码
-    Route::get('resetUserPassword', 'UserController@resetUserPassword');
+    Route::get('resetUserPassword/{id}', 'UserController@resetUserPassword');
     // 冻结启用禁用用户
     Route::get('changeUserStatus', 'UserController@changeUserStatus');
     // 菜单管理

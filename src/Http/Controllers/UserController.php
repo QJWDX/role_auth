@@ -39,7 +39,6 @@ class UserController extends Controller
             'description'
         ]);
         $params['password'] = Hash::make($params['username'].'@'.date('Y'));
-        $params['avatar'] = str_replace(config('app.url'), '', $params['avatar']);
         $res = $user->newQuery()->create($params);
         if($res){
             return $this->success('新增用户成功');
@@ -77,7 +76,7 @@ class UserController extends Controller
         $user->phone = $params['phone'];
         $user->sex = $params['sex'];
         $user->id_card = $params['id_card'];
-        $user->avatar = str_replace(config('app.url'), '', $params['avatar']);
+        $user->avatar = $params['avatar'];
         $user->address = $params['address'];
         $user->birthday = $params['birthday'];
         $user->description = $params['description'];
@@ -194,8 +193,10 @@ class UserController extends Controller
         if(!$currentUser){
             return $this->error('用户不存在');
         }
-        $currentUser->password =  Hash::make($currentUser['username'].'@'.date('Y'));
-        if($currentUser->save()){
+        $newPassword = Hash::make($currentUser['username'].'@'.date('Y'));
+        Log::error($newPassword);
+        $result = $user->newQuery()->where('id', $id)->update(['password' => $newPassword]);
+        if($result){
             return $this->success('重置密码成功');
         }
         return $this->error('重置密码失败');

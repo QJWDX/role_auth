@@ -65,6 +65,7 @@ class MenusController extends Controller
         ]);
         $menu->name = $params['name'];
         $menu->parent_id = $params['parent_id'];
+        $menu->icon = $params['icon'];
         $menu->path = $params['path'];
         $menu->component = $params['component'];
         $menu->is_related_route = $params['is_related_route'];

@@ -14,7 +14,7 @@ class MenusRequest extends BaseRequest
     {
         $id = $this->route('menu');
         return [
-            'name' => 'required|string|between:2,8|unique:menus,name,'.$id,
+            'name' => 'required|string|between:2,8',
             'parent_id' => 'required|integer|'.Rule::in(array_merge(Menus::query()->pluck('id')->toArray(), [0])),
             'icon' => 'required|string|between:1,255',
             'path' => 'required|string|between:1,255|unique:menus,path,'.$id,

@@ -33,7 +33,7 @@ class PermissionMiddleware
         $permission = new Permission();
 
         if (!$permission->shouldPassThrough($request)) {
-            throw new RoleException('无权限访问');
+            throw new RoleException('无权限访问', 403);
         }
 
         return $response;

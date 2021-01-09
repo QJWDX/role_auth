@@ -194,7 +194,7 @@ class RoleController extends Controller
         $menus = array_unique($menus);
         $thisRole = $role->newQuery()->find($id);
         if($thisRole['is_super'] == 1){
-            return $this->success('权限菜单配置成功');
+            return $this->success('配置成功');
         }
         $roleMenus->newQuery()->where('role_id', $id)->delete();
         $role_menu_data = [];
@@ -207,12 +207,12 @@ class RoleController extends Controller
             try {
                 // 角色赋予权限
                 $thisRole->perms()->sync($permissions);
-                return $this->success('权限菜单配置成功');
+                return $this->success('配置成功');
             }catch (\Exception $exception){
                 return $this->error(500, '[权限菜单配置失败]'.$exception->getMessage());
             }
         }
-        return $this->error(500, '权限菜单配置失败');
+        return $this->error(500, '配置失败');
     }
 
     /**
@@ -239,9 +239,9 @@ class RoleController extends Controller
                 ];
             }
             $roleUser->newQuery()->insert($insert_data);
-            return $this->success('角色拥有用户配置成功');
+            return $this->success('配置成功');
         }catch (\Exception $exception){
-            return $this->error(500, '角色拥有用户配置失败');
+            return $this->error(500, '配置失败');
         }
     }
 
