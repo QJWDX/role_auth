@@ -16,7 +16,7 @@ class DeleteRequest extends BaseRequest
     public function attributes()
     {
         return [
-            'ids' => '待删除的主键列表'
+            'ids' => '删除项'
         ];
     }
 }

@@ -85,7 +85,7 @@ class MenusController extends Controller
         if($menus->hasSubMenu($id)){
             return $this->success('含有子菜单,不允许删除');
         }
-        $menu = $menus->newQuery()->find($id);
+        $menu = $menus->newQuery()->where('id', $id)->first();
         $result = $menu->delete();
         if($result){
             return $this->success('删除菜单成功');
