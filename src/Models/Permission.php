@@ -24,7 +24,7 @@ class Permission extends EntrustPermission
         if (!$user) {
             throw new RoleException('请登录', 401);
         }
-        if ($user['super_account']) return true;
+        if ($user['is_super']) return true;
 
         //获取用户的角色与权限
         /** @var User $user */

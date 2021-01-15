@@ -15,6 +15,11 @@ class User extends Authenticate implements JWTSubject
 
     protected $table = 'users';
 
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id');
+    }
+
     /**
      * The attributes that are mass assignable.
      *
