@@ -28,6 +28,7 @@ class User extends Authenticate implements JWTSubject
     protected $fillable = [
         'name',
         'username',
+        'password',
         'sex',
         'email',
         'phone',
@@ -125,7 +126,7 @@ class User extends Authenticate implements JWTSubject
 
     public function builderQuery($params = []){
         $builder = $this->newQuery();
-        $builder->when($params['username'], function ($query) use ($params){
+        $builder->when(isset($params['username']) && $params['username'], function ($query) use ($params){
             $query->where('username', 'like', '%'. $params['username']);
         });
         return $builder;

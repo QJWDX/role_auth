@@ -30,7 +30,7 @@ class Role extends EntrustRole
 
     public function builderQuery($params = [], $field = ['*']){
         $builder = $this->newQuery();
-        $builder->when($params['name'], function ($query) use($params){
+        $builder->when(isset($params['name']) && $params['name'], function ($query) use($params){
             $query->where('name', 'like', '%' . $params['name'] . '%');
         });
         $builder->select($field);

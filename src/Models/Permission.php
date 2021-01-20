@@ -56,11 +56,11 @@ class Permission extends EntrustPermission
 
     public function builderQuery($params = [], $field = ['*']){
         $builder = $this->newQuery();
-        $builder->when($params['name'], function ($query) use($params){
+        $builder->when(isset($params['name']) && $params['name'], function ($query) use($params){
             $query->where('name', 'like', '%'. $params['name'].'%');
-        })->when($params['path'], function ($query) use($params){
+        })->when(isset($params['path']) && $params['path'], function ($query) use($params){
             $query->where('path', 'like', '%'. $params['path'].'%');
-        })->when($params['method'], function ($query) use($params){
+        })->when(isset($params['method']) && $params['method'], function ($query) use($params){
             $query->where('method', $params['method']);
         });
         $builder->select($field);
