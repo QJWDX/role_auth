@@ -128,6 +128,14 @@ class User extends Authenticate implements JWTSubject
         $builder = $this->newQuery();
         $builder->when(isset($params['username']) && $params['username'], function ($query) use ($params){
             $query->where('username', 'like', '%'. $params['username']);
+        })->when(isset($params['name']) && $params['name'], function ($query) use ($params){
+            $query->where('name', 'like', '%'. $params['name']);
+        })->when(isset($params['phone']) && $params['phone'], function ($query) use ($params){
+            $query->where('phone', $params['phone']);
+        })->when(isset($params['status']) && $params['status'] !== -1, function ($query) use ($params){
+            $query->where('status', $params['status']);
+        })->when(isset($params['sex']) && $params['sex'] !== -1, function ($query) use ($params){
+            $query->where('sex', $params['sex']);
         });
         return $builder;
     }

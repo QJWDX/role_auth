@@ -18,7 +18,11 @@ class UserController extends Controller
 {
     public function index(Request $request, User $user)
     {
-        $params = $request->only(['username']);
+        $params['username'] = $request->get('username', '');
+        $params['name'] = $request->get('name', '');
+        $params['phone'] = $request->get('phone');
+        $params['sex'] = $request->has('sex') ? intval($request->get('sex')) : -1;
+        $params['status'] = $request->has('status') ? intval($request->get('status')) : -1;
         $data = $user->userList($params);
         return $this->success($data);
     }
