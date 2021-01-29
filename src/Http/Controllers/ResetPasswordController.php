@@ -58,7 +58,8 @@ class ResetPasswordController extends Controller
             }
             $code = $this->createCodeStr();
             $to = $account['email'];
-            Mail::raw('【后台系统】您的验证码为'.$code.',请勿告诉任何人！', function ($message)use ($to) {
+            $systemName = env('SYSTEM_NAME', '个人网站管理系统');
+            Mail::raw('【'.$systemName.'】您的验证码为'.$code.',请勿告诉任何人！', function ($message)use ($to) {
                 $message->to($to)->subject('找回密码');
             });
             $result = $emailLog->createLog([
@@ -142,8 +143,8 @@ class ResetPasswordController extends Controller
         if ($reset_token != $token) {
             return $this->error('重置密码超时失效，请重新操作');
         }
-        if (strlen($pwd) < 5 or strlen($pwd) > 12) {
-            return $this->error('密码长度必须大于5位小于12位');
+        if (strlen($pwd) < 5 or strlen($pwd) > 30) {
+            return $this->error('密码长度必须大于5位小于30位');
         }
 
         $password = Hash::make($pwd);
