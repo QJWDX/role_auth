@@ -25,6 +25,14 @@ Route::group(['prefix' => 'auth/user', 'namespace' => 'Dx\Role\Http\Controllers'
     Route::post('captcha', 'LoginController@createCaptcha');
     // 获取rsa加密key
     Route::post('getRsaPublicKey', 'LoginController@getRsaPublicKey');
+    // 检查邮箱是否正确
+    Route::get('checkEmail', 'ResetPasswordController@checkEmail');
+    // 发送邮箱验证码
+    Route::post('sendResetPasswordEmail', 'ResetPasswordController@sendResetPasswordEmail');
+    // 检查邮箱验证码
+    Route::post('checkEmailCode', 'ResetPasswordController@checkEmailCode');
+    // 找回密码
+    Route::post('resetPassword', 'ResetPasswordController@resetPassword');
 });
 
 Route::group(['prefix' => 'api/setting', 'namespace' => 'Dx\Role\Http\Controllers','middleware' => ['api', 'role']], function (){

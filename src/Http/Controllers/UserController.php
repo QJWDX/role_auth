@@ -3,6 +3,7 @@
 namespace Dx\Role\Http\Controllers;
 
 use Dx\Role\Http\Request\UserRequest;
+use Dx\Role\Models\EmailLog;
 use Dx\Role\Models\Menus;
 use Dx\Role\Models\Role;
 use Dx\Role\Models\RoleMenu;
@@ -12,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redis;
 
 class UserController extends Controller
