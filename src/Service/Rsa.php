@@ -37,7 +37,7 @@ class Rsa
     public static function rsaEncrypt($plaintext, $public_key)
     {
         $rsa = static::instance();
-        $rsa->loadKey($public_key); // public key
+        $rsa->loadKey($public_key);
         //1 - ENCRYPTION_OAEP   2-ENCRYPTION_PKCS1 3-ENCRYPTION_NONE
         $rsa->setEncryptionMode(2);
         return base64_encode($rsa->encrypt($plaintext));
@@ -45,8 +45,7 @@ class Rsa
 
     /**
      * 私钥解密
-     *
-     * @param base64_string $encrypted
+     * @param $encrypted
      * @param string $private_key
      * @return string
      */
@@ -68,7 +67,7 @@ class Rsa
     public static function rsaSign($plaintext, $private_key)
     {
         $rsa = static::instance();
-        $rsa->loadKey($private_key); // private key
+        $rsa->loadKey($private_key);
         $rsa->setSignatureMode(2);
         return base64_encode($rsa->sign($plaintext));
 
@@ -85,7 +84,7 @@ class Rsa
     {
         $rsa = static::instance();
         $rsa->setSignatureMode(2);
-        $rsa->loadKey($public_key); // public key
+        $rsa->loadKey($public_key);
         return $rsa->verify($plaintext, base64_decode($signature), $signature);
     }
 }
