@@ -23,12 +23,12 @@ class RsaBeforeMiddleware
         if ($request->hasHeader("encryptKey")) {
             $encrypt_key = trim($request->header("encryptKey"));
             $key = RedisRsa::getFlashRsaKey($encrypt_key);
-            if (!$key) throw new DecryptException('encrypt_key错误', 500);
+            if (!$key) throw new DecryptException(500, 'encrypt_key错误');
             //解密Post请求中的数据
             $encrypt_data = $request->input("encrypt_data");
-            if (!$encrypt_data) throw new  DecryptException('密文不存在', 500);
+            if (!$encrypt_data) throw new  DecryptException(500, '密文不存在');
             $dataJson = Rsa::rsaDecrypt($encrypt_data, $key);
-            if (!$dataJson) throw new  DecryptException('密文错误', 500);
+            if (!$dataJson) throw new  DecryptException(500, '密文错误');
             $data = json_decode($dataJson, true);
             foreach ($data as $key => $val) {
                 $request->request->set($key, $val);

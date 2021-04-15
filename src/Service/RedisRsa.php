@@ -11,7 +11,7 @@ class RedisRsa
     {
         $private_key = Redis::connection()->get($key);
         if (!$private_key) {
-            throw new DecryptException('encrypt_key不存在', 500);
+            throw new DecryptException(500, 'encrypt_key不存在');
         }
         Redis::connection()->del($key);
         return $private_key;
