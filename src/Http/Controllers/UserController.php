@@ -117,11 +117,11 @@ class UserController extends Controller
         $user = Auth::guard('api')->user();
         $role_ids = $roleUser->newQuery()->where('user_id', $user['id'])->pluck('role_id')->toArray();
         $menu_ids = [];
-        $isSuperRole = $role->isSuperRole($role_ids);
-        if(!$isSuperRole){
+        $isSuper = ($user['is_super'] || $role->isSuperRole($role_ids)) ? true : false;
+        if(!$isSuper){
             $menu_ids = $roleMenus->newQuery()->whereIn('role_id', $role_ids)->distinct()->pluck('menu_id')->toArray();
         }
-        $permissionData = $menus->permissionMenusAndRoute($isSuperRole, $menu_ids);
+        $permissionData = $menus->permissionMenusAndRoute($isSuper, $menu_ids);
         return $this->success($permissionData);
     }
 
